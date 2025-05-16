@@ -1,0 +1,36 @@
+import:
+	java.text.DecimalFormat
+
+#> Formats a large number into a human-readable string with suffixes.
+#> 
+#> Converts numbers like 1234 → "1.23K", 1234567 → "1.23M" using suffixes for thousands, millions, billions, etc.
+#> Falls back to decimal formatting if the number is too large for the suffix list.
+#>
+#> @param number The numeric value to format.
+#> @return A formatted string representing the number with an appropriate suffix.
+function number_format(number: number) :: string:
+	if ({_number} < 1000):
+		return "%{_number}%"
+
+	# Figure out the suffix tier by grouping digits in thousands
+	# For non-mathers, treat log as like approximate count of how many digits there are
+	# We divide / 3 to find out the tier because we want to get the index, and that is every 3 digits.
+	set {_tier} to floor(log({_number}) / 3)
+
+	# Fallback format for if there isn't enough suffixes
+	if ({_tier} >= {-size::suffix}):
+		return {-decimal_format}.format({_number})
+
+	# Scale number down to a value between 1 and 999.999...
+	set {_scaled} to {_number} / 10 ^ ({_tier} * 3)
+
+	# Add them together
+	return "%{_scaled}%%{-suffixes::%{_tier}%}%"
+
+on script load:
+	# Conway-Wechsler system of naming large numbers, used in Miner's Haven
+	set {-suffixes::*} to "k M B T qd Qn sx Sp N O de Ud DD tdD qdD QnD sxD SpD OcD NvD Vgn UVg DVg TVg qtV QnV SeV SPG OVG NVG TGN UTG DTG tsTG qtTG QnTG ssTG SpTG OcTG NoTG QdDR uQDR dQDR tQDR qdQDR QnQDR sxQDR SpQDR OQDDr NQDDr qQGNT uQGNT dQGNT tQGNT qdQGNT QnQGNT sxQGNT SpQGNT OQQGNT NQQGNT SXGNTL USXGNTL DSXGNTL TSXGNTL QTSXGNTL QNSXGNTL SXSXGNTL SPSXGNTL OSXGNTL NVSXGNTL SPTGNTL USPTGNTL DSPTGNTL TSPTGNTL QTSPTGNTL QNSPTGNTL SXSPTGNTL SPSPTGNTL OSPTGNTL NVSPTGNTL OTGNTL UOTGNTL DOTGNTL TOTGNTL QTOTGNTL QNOTGNTL SXOTGNTL SPOTGNTL OTOTGNTL NVOTGNTL NONGNTL UNONGNTL DNONGNTL TNONGNTL QTNONGNTL QNNONGNTL SXNONGNTL SPNONGNTL OTNONGNTL NONONGNTL CENT UNCENT" split at " "
+	# Cache size of suffix list as it would have to be relooped every time, otherwise
+	set {-size::suffix} to size of {-suffixes::*}
+	# Store decimal formatter
+	set {-decimal_format} to new DecimalFormat("0.00E0")

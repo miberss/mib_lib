@@ -1,0 +1,67 @@
+#> Returns a random integer between **from** and **to**.
+#> A simple wrapper function around "random integer from x to y" since it provides to clutter.
+#> 
+#> @param to The maximum integer value.
+#> @param from The minimum integer value. Defaults to **0**.
+#> @return A random integer from **from** to **to**.
+function rndi(to: integer, from: integer = 0) :: integer:
+	return random integer from {_from} to {_to}
+
+#> Returns a random floating-point number between **from** and **to**.
+#> A simple wrapper function around "random number from x to y" since it provides to clutter.
+#>
+#> @param to The maximum number value.
+#> @param from The minimum number value. Defaults to **0**.
+#> @return A random number from **from** to **to**.
+function rnd(to: number, from: number = 0) :: number:
+	return random number from {_from} to {_to}
+
+#> Linearly interpolates between **a** and **b** at **time**
+#> the `time` parameter defaults to 0.5 since that provides a way to get the halfway point between two numbers
+#>
+#> @param a The start number.
+#> @param b The end number.
+#> @param time A value indicating the interpolation factor. 
+#> @return The interpolated number between **a** and **b**.
+function lerp(a: number, b: number, time: number = 0.5) :: number:
+	return {_a} * (1 - {_time}) + {_b} * {_time}
+
+#> Returns the sign of a number.
+#>
+#> @param value The number to check.
+#> @return -1 if negative, 1 if positive, 0 if zero.
+function sign(value: number) :: integer:
+	return -1 if {_value} < 0 
+	return 1 if {_value} > 0
+	return 0
+
+#> Smoothly interpolates a value between 0 and 1 using the SmoothStep function.
+#> 
+#> Useful for easing animations or transitions.
+#>
+#> @param value A number between 0 and 1.
+#> @return The smoothed value.
+function smooth_step(value: number) :: number:
+	return {_value} * {_value} * (3 - 2 * {_value})
+
+#> Loops a value back and forth between 0 and 1.
+#>
+#> Example: `pingpong(0.25)` → `0.25`, `pingpong(1.25)` → `0.75`
+#>
+#> @param value The input number.
+#> @return A number oscillating between 0 and 1.
+function pingpong(value: number) :: number:
+	return 1 - abs(1 - mod({_value} * 2, 2))
+
+#> Wraps a number around a range [low, high].
+#>
+#> Example: `wrap(12, 0, 10)` → `2`
+#>
+#> @param value The number to wrap.
+#> @param low The lower bound (inclusive).
+#> @param high The upper bound (exclusive).
+#> @return The wrapped number within [low, high].
+function wrap(value: number, low: number, high: number) :: number:
+	return mod(({_value} - {_low}), ({_high} - {_low})) + {_low}
+
+	

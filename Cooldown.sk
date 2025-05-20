@@ -1,4 +1,4 @@
-#> Sets a cooldown with the id **id** and the holder **holder**
+#> Sets a cooldown with an id and holder
 #> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
 #>
 #> @param id The id of the cooldown
@@ -8,7 +8,7 @@ function set_cooldown(id: text, duration: timespan, holder: metadataholder = {_}
     set {cooldown::%{_id}%::%{_holder}%::duration} to {_duration}
     set {cooldown::%{_id}%::%{_holder}%::start} to now
 
-#> Deletes a cooldown with the id **id** and the holder **holder**
+#> Deletes a cooldown with an id and holder
 #> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
 #>
 #> @param id The id of the cooldown
@@ -16,7 +16,7 @@ function set_cooldown(id: text, duration: timespan, holder: metadataholder = {_}
 function delete_cooldown(id: text, holder: metadataholder = {_}):
     delete {cooldown::%{_id}%::%{_holder}%::*}
 
-#> Returns the remaining time of the cooldown with the id **id** and the holder **holder**
+#> Returns the remaining time of the cooldown with an id and holder
 #> If the cooldown is over, it will automatically delete it and return 0 seconds.
 #>
 #> @param id The id of the cooldown
@@ -28,10 +28,10 @@ function get_remaining_cooldown(id: text, holder: metadataholder = {_}) :: times
     delete_cooldown({_id}, {_holder})
     return 0 seconds
 
-#> Returns whether the cooldown with the id **id** and the holder **holder** is set
+#> Returns whether the cooldown with an id and holder is active
 #>
 #> @param id The id of the cooldown
 #> @param holder The holder of the cooldown
-#> @return Whether the cooldown is set
+#> @return Whether the cooldown is active
 function is_on_cooldown(id: text, holder: metadataholder = {_}) :: boolean:
     return whether get_remaining_cooldown({_id}, {_holder}) > 0 seconds

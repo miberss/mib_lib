@@ -33,8 +33,8 @@ function run_test(test_id: string, value: object, expected: object) :: booleans:
 #> @param expected The expected value for comparison.
 #> @return A formatted multi-line result string for the value equality test.
 function test_value(test_id: string, type: string, value: object, expected: object) :: string:
-	set {_color} to {-color::%{_type}%}
-	set {_emoji} to {-test::%{_type}%}
+	set {_color} to get_mib_color({_type})
+	set {_emoji} to {-mib_lib::emoji::%{_type}%}
 	set {_message} to get_message({_type})
 
 	new string joined with nl stored in {_result}:
@@ -54,8 +54,8 @@ function test_value(test_id: string, type: string, value: object, expected: obje
 function test_type(test_id: string, type: string, value: object, expected: object) :: string:
 	set {_expected_type} to type({_expected})
 	set {_value_type} to type({_value})
-	set {_color} to {-color::%{_type}%}
-	set {_emoji} to {-test::%{_type}%}
+	set {_color} to get_mib_color({_type})
+	set {_emoji} to {-mib_lib::emoji::%{_type}%}
 	set {_message} to get_message({_type})
 
 	new string joined with nl stored in {_result}:
@@ -94,5 +94,5 @@ local function get_message(type: string) :: string:
 	return {_type} if {_type} = "success"
 
 on script load:
-	set {-test::error} to "☒"
-	set {-test::success} to "☑"
+	set {-mib_lib::emoji::error} to "☒"
+	set {-mib_lib::emoji::success} to "☑"

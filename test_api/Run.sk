@@ -1,7 +1,6 @@
 using script reflection
 using for loops
 
-
 local function get_all_tests() :: functions:
 	return scripts in folder "mib_lib\tests" mapped with (function "test" from (script "%input%"))
 
@@ -12,7 +11,7 @@ local function clear_test_results():
 local function test_header(name: string) :: string:
 	new string joined with nl stored in {_header}:
 		sm("info", "")
-		sm("info", "[1] Running Test: %{_name}%")
+		sm("info", "Running Test: {1}", {_name})
 		sm("info", "")
 	return {_header}
 
@@ -33,16 +32,16 @@ local function result_summary() :: string:
 		sm("info", "<strike>                                             ")
 	return {_summary}
 
+#> Runs all tests in the mib_lib/tests/ directory
+#> Broadcasts results to chat; meant to be used on startup
 function run_all_tests():
 	clear_test_results()
 
 	for {_test} in get_all_tests():
-		test_header(name of {_test}.source())
+		admin_log(test_header(name of {_test}.source()))
 		run {_test}
 
-	broadcast result_summary()
+	admin_log(result_summary())
 
-command /mib_lib:test:
-	permission: op
-	trigger:
-		broadcast time_nanos_formatted("run_all_tests")
+on skript start:
+	run_all_tests()

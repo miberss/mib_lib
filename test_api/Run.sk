@@ -1,0 +1,48 @@
+using script reflection
+using for loops
+
+
+local function get_all_tests() :: functions:
+	return scripts in folder "mib_lib\tests" mapped with (function "test" from (script "%input%"))
+
+local function clear_test_results():
+	for {_id} in indexes of {-test::result::*}:
+		delete {-test::result::%{_id}%::*}
+
+local function test_header(name: string) :: string:
+	new string joined with nl stored in {_header}:
+		sm("info", "")
+		sm("info", "[1] Running Test: %{_name}%")
+		sm("info", "")
+	return {_header}
+
+local function result_summary() :: string:
+	for {_id} in indexes of {-test::result::*}:
+		set {_total} to {_total} + 1
+		set {_value} to {-test::result::%{_id}%::value}
+		if {_value} = true:
+			add 1 to {_passed}
+		else:
+			add 1 to {_failed}
+
+	new string joined with nl stored in {_summary}:
+		sm("info", "<strike>             [1]<strike>             ", " Test Summary ")
+		sm("info", "Total Tests: [1]", {_total})
+		sm("info", "Passed: [1]", {_passed} ? 0)
+		sm("info", "Failed: [1]", {_failed} ? 0)
+		sm("info", "<strike>                                             ")
+	return {_summary}
+
+function run_all_tests():
+	clear_test_results()
+
+	for {_test} in get_all_tests():
+		test_header(name of {_test}.source())
+		run {_test}
+
+	broadcast result_summary()
+
+command /mib_lib:test:
+	permission: op
+	trigger:
+		broadcast time_nanos_formatted("run_all_tests")

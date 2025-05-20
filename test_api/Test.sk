@@ -1,0 +1,98 @@
+#> Runs both a value equality test and a type equality test for two
+#> given values, logs results, and outputs to console and operators.
+#>
+#> @param test_id Unique identifier for the test run.
+#> @param value The actual value to be tested.
+#> @param expected The expected value to compare against.
+#> @return Booleans of Value Result & Type Result
+function run_test(test_id: string, value: object, expected: object) :: booleans:
+
+	set {_result::value} to assert( {_value}, {_expected} )
+	set {_result::type} to type_assert( {_value}, {_expected} )
+
+	set {_type} to "error" if ({_result::value} = false) else "success" 
+	set {-test::result::%{_test_id}%::value} to {_result::value}
+
+	set {_message::value} to test_value( {_test_id}, {_type}, {_value}, {_expected} )
+
+	set {_type} to "error" if ({_result::type} = false) else "success" 
+	set {-test::result::%{_test_id}%::type} to {_result::type}
+
+	set {_message::type} to test_type( {_test_id}, {_type}, {_value}, {_expected} )
+
+	send (join {_message::type} with nl) to (console and ops)
+	return {_result::value}, {_result::type}
+
+
+#> Formats the result of a value equality test with status
+#> indicators, messages, and expected/actual values.
+#>
+#> @param test_id Unique identifier for the test run.
+#> @param type The result type (either "success" or "error").
+#> @param value The actual value being tested.
+#> @param expected The expected value for comparison.
+#> @return A formatted multi-line result string for the value equality test.
+function test_value(test_id: string, type: string, value: object, expected: object) :: string:
+	set {_color} to {-color::%{_type}%}
+	set {_emoji} to {-test::%{_type}%}
+	set {_message} to get_message({_type})
+
+	new string joined with nl stored in {_result}:
+		sm({_type}, "[1]",  "%{_color}%%{_emoji}% %{_test_id}% value %{_message}%!")
+		sm({_type}, "├ Expected:%space(7)%%zero(1)%[1]", ( {_expected} ) )
+		sm({_type}, "└ Actual:%space(22)%[1]",            ( {_value} ) )
+
+	return {_result}
+
+#> Formats the result of a type equality test with status indicators, messages, and expected/actual types and values.
+#>
+#> @param test_id Unique identifier for the test run.
+#> @param type The result type (either "success" or "error").
+#> @param value The actual value being tested.
+#> @param expected The expected value for comparison.
+#> @return A formatted multi-line result string for the type equality test.
+function test_type(test_id: string, type: string, value: object, expected: object) :: string:
+	set {_expected_type} to type({_expected})
+	set {_value_type} to type({_value})
+	set {_color} to {-color::%{_type}%}
+	set {_emoji} to {-test::%{_type}%}
+	set {_message} to get_message({_type})
+
+	new string joined with nl stored in {_result}:
+		sm({_type}, "[1]",  "%{_color}%%{_emoji}% %{_test_id}% type %{_message}%!")
+		sm({_type}, "├ Expected:%space(7)%%zero(1)%[1] ([2])", ( {_expected_type}, "<italic>%{_expected}%" ) )
+		sm({_type}, "└ Actual:%space(22)%[1] ([2])",            ( {_value_type},   "<italic>%{_value}%"    ) )
+
+	return {_result}
+
+#> Assert on the type of both values provided
+#> 
+#> @param value The value to compare
+#> @param expected The value to compare against
+#> @return Whether the type of two parameters are equal
+function type_assert(value: object, expected: object) :: boolean:
+	return whether type({_value}) = type({_expected}) 
+
+#> Asserts both values provided
+#> 
+#> @param value The value to compare
+#> @param expected The value to compare against
+#> @return Whether the two parameters are equal
+function assert(value: object, expected: object) :: boolean:
+	return whether {_value} = {_expected}
+
+#> Returns the Skript type name of a given value.
+#> Useful for comparing or displaying the data type of an object in string form.
+#>
+#> @param object The value whose type should be returned.
+#> @return The type name of the value as a string.
+function type(object: object) :: string:
+	return skript type of {_object}
+
+local function get_message(type: string) :: string:
+	return "fail" if {_type} = "error"
+	return {_type} if {_type} = "success"
+
+on script load:
+	set {-test::error} to "☒"
+	set {-test::success} to "☑"

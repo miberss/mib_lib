@@ -1,3 +1,8 @@
+# This example does the following things:
+# - Allows players to specify which format they want to use.
+# - Allows players to see all format options.
+# - Displays a random number in the specified format every 10 ticks.
+
 using for loops
 
 command /mib_lib:format <format:string>:
@@ -6,17 +11,24 @@ command /mib_lib:format <format:string>:
 		format_command(player, {_format})
 
 function format_command(p: player, format: string):
+	# Check if the provided format is an actual format
 	if is_format_valid({_format}) = false:
+		# If not, send a message to the player and stop further execution.
 		send "<red>That is not a valid format!" to {_p}
 		stop
-
+	# If the format is valid, set the player's format to the specified format.
 	set {-format::%{_p}%} to {_format}
 
 on tab complete of "/format":
+	# Show all valid formats when the player types "/format"
 	set tab completions for position 1 to all_formats()
 
 every 10 ticks:
+	# Generate a random number between 1 and a very, very large number.
 	set {_number} to (random number between 1 and 9.99999) ^ (random integer between 1 and 308)
+	# Loop through all players.
 	for {_p} in all players:
+		# Format the number using the player's specified format.
 		set {_formatted} to number_format({_number}, {-format::%{_p}%})
+		# Send the formatted number to the player as an action bar message.
 		send actionbar "%{-colour::info}%%{_formatted}%" to {_p}

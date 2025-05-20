@@ -1,3 +1,6 @@
+# This module provides many useful math functions.
+# This module requires the following other modules: NONE
+
 #> Returns a random integer between **from** and **to**.
 #> A simple wrapper function around "random integer from x to y" since it provides to clutter.
 #> 

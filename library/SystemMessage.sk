@@ -1,3 +1,9 @@
+# This module provides a system for formatting strings into
+# neat, good-looking messages. You can optionally pass in
+# inputs to replace in the message.
+# 
+# This module requires the following other modules: NONE
+
 using for loops
 
 on script load:

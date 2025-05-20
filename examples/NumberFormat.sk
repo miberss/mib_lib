@@ -29,6 +29,6 @@ every 10 ticks:
 	# Loop through all players.
 	for {_p} in all players:
 		# Format the number using the player's specified format.
-		set {_formatted} to number_format({_number}, {-format::%{_p}%} ? "small")
+		set {_formatted} to number_format({_number}, ({-format::%{_p}%} ? "small"))
 		# Send the formatted number to the player as an action bar message.
 		send actionbar  "%get_mib_color("info")%%{_formatted}%" to {_p}

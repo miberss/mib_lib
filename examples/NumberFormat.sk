@@ -5,9 +5,9 @@ command /mib_lib:format <format:string>:
 	trigger:
 		format_command(player, {_format})
 
-function format_command(p: player, format: string):
+local function format_command(p: player, format: string):
 	if is_format_valid({_format}) = false:
-		send "<red>That is not a valid format!" to {_p}
+		send "%get_mib_color("error")%That is not a valid format!" to {_p}
 		stop
 
 	set {-format::%{_p}%} to {_format}
@@ -18,5 +18,5 @@ on tab complete of "/format":
 every 10 ticks:
 	set {_number} to (random number between 1 and 9.99999) ^ (random integer between 1 and 308)
 	for {_p} in all players:
-		set {_formatted} to number_format({_number}, {-format::%{_p}%})
-		send actionbar "%{-colour::info}%%{_formatted}%" to {_p}
+		set {_formatted} to number_format({_number}, ({-format::%{_p}%} ? "small"))
+		send actionbar "%get_mib_color("info")%%{_formatted}%" to {_p}

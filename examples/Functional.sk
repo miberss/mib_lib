@@ -1,0 +1,5 @@
+function new_sum(integers: integers) :: integer:
+	return fold({_integers::*}, 0, function "add")
+
+function add(a: integer, b: integer) :: integer:
+	return {_a} + {_b}

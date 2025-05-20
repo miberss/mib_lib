@@ -1,5 +1,7 @@
-function new_sum(integers: integers) :: integer:
+using script reflection
+
+local function new_sum(integers: integers) :: integer:
 	return reduce({_integers::*}, 0, function "add")
 
-function add(a: integer, b: integer) :: integer:
+local function add(a: integer, b: integer) :: integer:
 	return {_a} + {_b}

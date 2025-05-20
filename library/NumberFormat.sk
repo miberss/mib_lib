@@ -1,3 +1,7 @@
+# This module provides a system for formatting numbers into human-readable strings.
+#
+# This module requires the following other modules: NONE
+
 using script reflection
 
 import:

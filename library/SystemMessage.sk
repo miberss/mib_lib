@@ -1,0 +1,44 @@
+using for loops
+
+on script load:
+	set {-color::main} to "<#FEFEE0>"
+	set {-color::accent} to "<#C0FDFB>"
+	set {-color::info} to "<#95B8D1>"
+	set {-color::warning} to "<#FFA400>"
+	set {-color::error} to "<#F9627D>"
+	set {-color::success} to "<#4FB477>"
+
+options:
+	main: %{-color::main}% 
+	accent: %{-color::accent}%
+	prefix: [⏹]
+
+function system_message(level: text, msg: text, inputs: objects = {_}) :: string:
+	set {_prefix} to formatted "%{-color::%{_level}%}%{@prefix}{@main}"
+	
+	if {_inputs::1} is not set:
+		return formatted "%{_prefix}% %{_msg}%"
+
+	for {_index}, {_value} in {_inputs::*}:
+		set {_msg} to join (regex split {_msg} by "(?<!\\)\(%{_index}%\)") with "%{_value}%{@main}"
+		set {_msg} to join (regex split {_msg} by "(?<!\\)\[%{_index}%\]") with "{@accent}%{_value}%{@main}"
+		set {_msg} to join (regex split {_msg} by "(?<!\\)\{%{_index}%\}") with """{@accent}%{_value}%{@main}"""
+
+	replace all "\(" with "(" in {_msg}
+	replace all "\[" with "[" in {_msg}
+	replace all "\{" with "{" in {_msg}
+	
+	return formatted "%{_prefix}% %{_msg}%"
+
+function sm(level: text, msg: text, inputs: objects = {_}) :: string:
+	return system_message({_level}, {_msg}, {_inputs::*})
+
+function space(pixels: integer) :: string:
+	set {_space} to floor({_i} / 5)
+	set {_zero} to {_i} - ({_space} * 5)
+	return "<bold>" + (" " repeated {_space} times) + (zero({_zero})) + "<reset>{@main}"
+
+function zero(times: integer) :: string:
+	return (character at codepoint 8402) repeated {_i} times
+
+

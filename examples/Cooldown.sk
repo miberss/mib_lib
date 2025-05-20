@@ -1,0 +1,14 @@
+# This example makes use of the cooldown system to
+# create a fireball ability by right clicking with a gold nugget.
+
+on right click with a gold nugget:
+	# Check if the "fireball" cooldown for the player is active.
+	if is_on_cooldown("fireball", player) is true:
+		# get the remaining cooldown time
+		set {_remaining_cooldown} to get_remaining_cooldown("fireball", player)
+		# Utilize the SystemMessage module to send a message to the player saying how long they have to wait.
+		send sm("info", "You must wait {1} before using this ability again.", {_remaining_cooldown}) to player
+		# Stop the script from executing further.
+		stop
+	# Set the cooldown for the player to 5 seconds.
+	set_cooldown("fireball", 5 seconds, player)

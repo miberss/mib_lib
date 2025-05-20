@@ -1,9 +1,13 @@
+# This module provides a system for managing cooldowns.
+#
+# This module requires the following other modules: NONE
+
 #> Sets a cooldown with an id and holder
 #> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
 #>
 #> @param id The id of the cooldown
 #> @param duration The duration of the cooldown
-#> @param holder The holder of the cooldown
+#> @param holder (optional) The holder of the cooldown
 function set_cooldown(id: text, duration: timespan, holder: metadataholder = {_}):
     set {cooldown::%{_id}%::%{_holder}%::duration} to {_duration}
     set {cooldown::%{_id}%::%{_holder}%::start} to now
@@ -12,7 +16,7 @@ function set_cooldown(id: text, duration: timespan, holder: metadataholder = {_}
 #> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
 #>
 #> @param id The id of the cooldown
-#> @param holder The holder of the cooldown
+#> @param holder (optional) The holder of the cooldown
 function delete_cooldown(id: text, holder: metadataholder = {_}):
     delete {cooldown::%{_id}%::%{_holder}%::*}
 
@@ -20,7 +24,7 @@ function delete_cooldown(id: text, holder: metadataholder = {_}):
 #> If the cooldown is over, it will automatically delete it and return 0 seconds.
 #>
 #> @param id The id of the cooldown
-#> @param holder The holder of the cooldown
+#> @param holder (optional) The holder of the cooldown
 #> @return The remaining time of the cooldown
 function get_remaining_cooldown(id: text, holder: metadataholder = {_}) :: timespan:
     set {_remaining} to {cooldown::%{_id}%::%{_holder}%::duration} - (time since {cooldown::%{_id}%::%{_holder}%::start})
@@ -31,7 +35,7 @@ function get_remaining_cooldown(id: text, holder: metadataholder = {_}) :: times
 #> Returns whether the cooldown with an id and holder is active
 #>
 #> @param id The id of the cooldown
-#> @param holder The holder of the cooldown
+#> @param holder (optional) The holder of the cooldown
 #> @return Whether the cooldown is active
 function is_on_cooldown(id: text, holder: metadataholder = {_}) :: boolean:
     return whether get_remaining_cooldown({_id}, {_holder}) > 0 seconds

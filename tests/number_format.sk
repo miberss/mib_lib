@@ -1,0 +1,23 @@
+local function test():
+	run_test("format_valid", is_format_valid("scientific"), true)
+	run_test("format_invalid", is_format_valid("pblt"), false)
+	run_test("format_none", is_format_valid({_}), false)
+
+	run_test("all_formats_1st", 1st element of all_formats(), "small")
+	run_test("all_formats_count", size of all_formats(), 4)
+
+	run_test("small_format_under_1000", number_format(999, "small"), "999")
+	run_test("small_format_k", number_format(1234, "small"), "1.23k")
+	run_test("small_format_M", number_format(1234567, "small"), "1.23M")
+
+	run_test("big_format_Thousand", number_format(1234, "big"), "1.23 Thousand")
+	run_test("big_format_Million", number_format(1234567, "big"), "1.23 Million")
+
+	run_test("full_format_999", number_format(999, "full"), "999")
+	run_test("full_format_1234", number_format(1234, "full"), "1,234")
+	run_test("full_format_1234567", number_format(1234567, "full"), "1,234,567")
+
+	run_test("scientific_format_1234", number_format(1234, "scientific"), "1.23E3")
+	run_test("scientific_format_1234567", number_format(1234567, "scientific"), "1.23E6")
+	
+	run_test("default_format_1234", number_format(1234), "1.23k")

@@ -80,7 +80,7 @@ function space(pixels: integer, after_format: string = {_}) :: string:
 #> @param times Amount of zero width characters
 #> @return The zero width characters
 function zero(times: integer) :: string:
-	return (character at codepoint 8204) repeated {_times} times
+	return ((character at codepoint 8204) repeated {_times} times) ? ""
 
 #> Returns the color of mib_lib's formatting, for use internally.
 #> 

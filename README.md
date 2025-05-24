@@ -5,10 +5,17 @@
 Get your servers off the ground faster! mib_lib fills out Skript’s feature set with useful systems, utilities for projects any size.
 Easy to install, use, and to trim down for your project's needs.
 
-> [!IMPORTANT] 
+> [!IMPORTANT]
 >
-> Alot of the modules *will* fail to work if you don't have the required addon list
-> Please install the latest versions of SkCheese, oopsk, SkBee, skript-reflect and Skript.
+> A lot of the modules **will fail to work** if you don't have the required addon list installed.
+>  
+> Please install the latest versions of the following addons:
+>
+> - [SkCheese](https://github.com/erenkarakal/SkCheese)
+> - [oopsk](https://github.com/sovdeeth/oopsk)
+> - [SkBee](https://modrinth.com/plugin/skbee)
+> - [skript-reflect](https://github.com/TPGamesNL/skript-reflect)
+> - [Skript](https://github.com/SkriptLang/Skript)
 ---
 
 ## 📦 Getting Started

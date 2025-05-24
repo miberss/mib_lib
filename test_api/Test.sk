@@ -11,12 +11,12 @@ function run_test(test_id: string, value: object, expected: object) :: booleans:
 	set {_result::type} to type_assert( {_value}, {_expected} )
 
 	set {_type} to "error" if ({_result::value} = false) else "success" 
-	set {-test::result::%{_test_id}%::value} to {_result::value}
+	set {-mib_lib::result::%{_test_id}%::value} to {_result::value}
 
 	set {_message::value} to test_value( {_test_id}, {_type}, {_value}, {_expected} )
 
 	set {_type} to "error" if ({_result::type} = false) else "success" 
-	set {-test::result::%{_test_id}%::type} to {_result::type}
+	set {-mib_lib::result::%{_test_id}%::type} to {_result::type}
 
 	set {_message::type} to test_type( {_test_id}, {_type}, {_value}, {_expected} )
 

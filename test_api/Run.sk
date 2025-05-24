@@ -6,7 +6,7 @@ local function get_all_tests() :: functions:
 
 local function clear_test_results():
 	for {_id} in indexes of {-test::result::*}:
-		delete {-test::result::%{_id}%::*}
+		delete {-mib_lib::result::%{_id}%::*}
 
 local function test_header(name: string) :: string:
 	new string joined with nl stored in {_header}:
@@ -18,7 +18,7 @@ local function test_header(name: string) :: string:
 local function result_summary() :: string:
 	for {_id} in indexes of {-test::result::*}:
 		set {_total} to {_total} + 1
-		set {_value} to {-test::result::%{_id}%::value}
+		set {_value} to {-mib_lib::result::%{_id}%::value}
 		if {_value} = true:
 			add 1 to {_passed}
 		else:
@@ -32,8 +32,8 @@ local function result_summary() :: string:
 		sm("info", "<strike>                                             ")
 	return {_summary}
 
-#> Runs all tests in the mib_lib/tests/ directory
-#> Broadcasts results to chat; meant to be used on startup
+#> Runs all tests in the `mib_lib/tests` directory
+#> Broadcasts results to admins & console; meant to be used on startup
 function run_all_tests():
 	clear_test_results()
 

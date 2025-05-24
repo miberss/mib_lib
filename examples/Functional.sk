@@ -1,7 +1,32 @@
 using script reflection
 
-local function new_sum(integers: integers) :: integer:
-	return reduce({_integers::*}, 0, function "add")
+on script load:
+	# Example: fn
+	# Get a reference to a function named "abs" in the global scope
+	set {_myFunc} to fn("abs")
+	set {_abs} to result of {_myFunc} with args (-15)
 
-local function add(a: integer, b: integer) :: integer:
+	# Get a local function named "add" from this script
+	set {_add} to fn("add", "%current script%")
+
+	# Example: identity
+	# Pass through a value without changing it
+	set {_result} to identity("unchanged value")
+	# {_result} is now "unchanged value"
+
+	# Example: foreach
+	# Run a function called "printItem" for each value in a list
+	set {_items::*} to "one", "two", "three"
+	foreach({_items::*}, fn("print_item", "%current script%"))
+
+	# Example: reduce
+	# Sum a list of numbers using a combiner function
+	set {_numbers::*} to 1, 2, 3, 4, 5
+	set {_total} to reduce({_numbers::*}, 0, {_add})
+	# {_total} is now 15
+
+local function print_item(item: string):
+	send {_item} to (console and all operators)
+
+local function add(a: number, b: number) :: number:
 	return {_a} + {_b}

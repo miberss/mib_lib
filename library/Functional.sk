@@ -16,13 +16,23 @@ using script reflection
 function fn(name: string, script: string = {_}) :: function:
 	return function named {_name} in (script {_script})
 
-#> The identity function returns the object given to it without any changes
+#> The id function returns the object given to it without any changes
 #> Useful as a no-op function in functional pipelines or higher-order functions
+#> Use `ids()` if you want multiple values
 #>
 #> @param value Any object
 #> @return The object passed in
-function identity(value: object) :: object:
+function id(value: object) :: object:
 	return {_value}
+
+#> The ids function returns the objects given to it without any changes
+#> Useful as a no-op function in functional pipelines or higher-order functions
+#> Use `id()` if you want a singular value
+#>
+#> @param value Any objects
+#> @return The objects passed in
+function ids(value: objects) :: objects:
+	return {_value::*}
 
 #> Applies a function to each item in a collection
 #> Useful for transforming or performing actions on items in a list without using explicit for loops

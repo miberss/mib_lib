@@ -20,7 +20,7 @@ function run_test(test_id: string, value: object, expected: object) :: booleans:
 
 	set {_message::type} to test_type( {_test_id}, {_type}, {_value}, {_expected} )
 
-	send (join {_message::type} with nl) to (console and ops)
+	send (join {_message::*} with nl) to (console and ops)
 	return {_result::value}, {_result::type}
 
 
@@ -79,6 +79,11 @@ function type_assert(value: object, expected: object) :: boolean:
 #> @param expected The value to compare against
 #> @return Whether the two parameters are equal
 function assert(value: object, expected: object) :: boolean:
+	if all:
+		{_value} is not set
+		{_expected} is not set
+	then:
+		return true
 	return whether {_value} = {_expected}
 
 #> Returns the Skript type name of a given value.
@@ -87,6 +92,8 @@ function assert(value: object, expected: object) :: boolean:
 #> @param object The value whose type should be returned.
 #> @return The type name of the value as a string.
 function type(object: object) :: string:
+	if {_object} is not set:
+		return "none"
 	return skript type of {_object}
 
 local function get_message(type: string) :: string:

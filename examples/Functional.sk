@@ -1,21 +1,21 @@
 using script reflection
 
-on script load:
+function functional_example():
 	# Example: fn
-	# Get a reference to a function named "abs" in the global scope
-	set {_myFunc} to fn("abs")
-	set {_abs} to result of {_myFunc} with args (-15)
+	# Get a reference to a function named "abs"
+	set {_abs} to fn("abs")
+	set {_value} to result of {_abs} with args (-15)
 
 	# Get a local function named "add" from this script
 	set {_add} to fn("add", "%current script%")
 
-	# Example: identity
+	# Example: id
 	# Pass through a value without changing it
-	set {_result} to identity("unchanged value")
+	set {_result} to id("unchanged value")
 	# {_result} is now "unchanged value"
 
 	# Example: foreach
-	# Run a function called "printItem" for each value in a list
+	# Run a function called "print_item" for each value in a list
 	set {_items::*} to "one", "two", "three"
 	foreach({_items::*}, fn("print_item", "%current script%"))
 

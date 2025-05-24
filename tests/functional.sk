@@ -1,0 +1,32 @@
+using script reflection
+
+local function mock_function() :: string:
+	return "mocked"
+
+local function add(a: object, b: object) :: object:
+	return {_a} + {_b}
+
+local function str_add(a: object, b: object) :: object:
+	return {_a} + {_b}
+
+local function collect(item: integer):
+	add ({_item} * 2) to {-mib_lib::collected::*}
+
+local function test():
+	set {_script} to "%current script%"
+	run_test("fn_existing_global", result of fn("mock_function", {_script}), "mocked")
+	run_test("fn_nonexistent", fn("missing_function"), {_})
+
+	run_test("identity_number", id(42), 42)
+	run_test("identity_string", id("hello"), "hello")
+	set {_sample::*} to (1, 2, 3) 
+	run_test("identity_list", 1st element of ids({_sample::*}), 1)
+
+	foreach({_sample::*}, fn("collect", {_script}))
+	run_test("foreach_collected_values", {-mib_lib::collected::1}, 2)
+	delete {-mib_lib::collected::*}
+
+	run_test("reduce_sum", reduce((1, 2, 3, 4), 0, fn("add", {_script})), 10)
+
+	run_test("reduce_concat", reduce(("a", "b", "c"), "", fn("str_add", {_script})), "abc")
+

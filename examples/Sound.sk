@@ -1,0 +1,74 @@
+using script reflection
+
+# define a bunch of sounds on script load
+on script load:
+	define_sound("bass", "block.note_block.bass", 0.6, 0.3, 1)
+	define_sound("impact", "minecraft:entity.ender_eye.death", 0.7, 1.75, 3)
+	define_sound("boom", "entity.illusioner.prepare_mirror", 1, 1.2, 1)
+	define_sound("hit", "block.gilded_blackstone.hit", 0.8, 2, 1)
+	define_sound("magic", "block.amethyst_block.hit", 1, 9)
+	define_sound("kick", "block.ancient_debris.hit", 0.2, 1, 1)
+	define_sound("tsk", "block.big_dripleaf.tilt_up", 0.3, 1)
+	define_sound("chime", "block.note_block.chime", 0.5, 1)
+
+# transformer that slightly raises pitch and volume each repeat
+local function pitch_up(sound: struct, i: integer) :: struct:
+	add ({_i} / 20) to {_sound}->pitch
+	add ({_i} / 10) to {_sound}->volume
+	return {_sound}
+
+# play a repeating sound sequence to a player
+function play_teh_sound(p: player):
+	sound_repeat({_p}, "bass", 4, 10 ticks, function "pitch_up")
+	sound_repeat({_p}, "impact", 4, 10 ticks, function "pitch_up")
+	sound_repeat({_p}, "hit", 8, 5 ticks)
+	sound({_p}, "boom", 37 ticks)
+
+# another example with more varied sounds and transformers
+function magic_sound(p: player):
+	sound_repeat({_p}, "kick", 15, 2 ticks)
+	sound_repeat({_p}, "tsk", 6, 5 ticks)
+	sound_repeat({_p}, "magic", 8, 5 ticks, function "magic_changer")
+	wait 35 ticks
+	sound_repeat({_p}, "chime", 10, 1 tick, function "chime_up")
+
+# makes chime pitch go up progressively
+local function chime_up(sound: struct, i: integer) :: struct:
+	set {_sound}->pitch to {_i} / 5
+	return {_sound}
+
+# makes magic sound pitch drop over time
+local function magic_changer(sound: struct, i: integer) :: struct:
+	set {_sound}->pitch to (8 - {_i}) / 5
+	return {_sound}
+
+# patterns and layers are different ways to define sounds,
+# they give you a less messy way of describing "beats" and i bet
+# you could compose a basic song / kick drum loop with this
+# 
+# i am not a music producer so i don't really know how to use this
+# well but im sure other people could find this useful.
+#
+# this is kind of like a combo sound (almost)
+#
+# define some patterns on script load
+on script load:
+	# drum pattern: bass on 1 tick, hit on 0, impact on 2
+	set {_step::1} to get_pattern_step("bass", 1 ticks)
+	set {_step::2} to get_pattern_step("hit", 0 ticks)
+	set {_step::3} to get_pattern_step("impact", 2 ticks)
+	define_pattern("drum", {_step::*})
+
+	# explosion pattern: boom at 0 ticks
+	set {_step::1} to get_pattern_step("boom", 0 ticks)
+	define_pattern("explosion", {_step::*})
+
+# plays multiple pattern layers in time
+function compose_sound(p: player):
+	# drum pattern playing at beats 0, 0.5, 1, and 1.5
+	set {_layer::1} to get_pattern_layer("drum", (0, 0.5, 1, 1.5))
+	# explosion pattern at beat 1.5
+	set {_layer::2} to get_pattern_layer("explosion", (1.5))
+
+	# play all layers together, beat length 15 ticks
+	play_pattern_layer({_p}, {_layer::*}, 15 ticks)

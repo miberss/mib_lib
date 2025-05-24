@@ -1,0 +1,146 @@
+# This module provides utilities for defining, sequencing, and playing sounds, patterns, and sound layers
+# Supports defining sound configurations, arranging them into patterns, and scheduling their play timings
+# Useful for timing-based sound sequences, layered sound patterns, and generative sound effects
+#
+# This module requires the following other modules: NONE
+
+using script reflection
+using for loops
+
+# STRUCTS
+
+#> Represents a sound configuration with properties for how it should be played
+struct sound:
+	id: string                        # The Minecraft sound ID
+	volume: number                    # Volume to play at
+	pitch: number                     # Pitch to play at
+	seed: integer = {_}               # Optional randomization seed
+	category: sound category = master category  # Sound category for context
+
+#> Represents a single step in a sound pattern
+struct pattern_step:
+	sound_id: string                  # ID of the sound to play
+	offset: timespan                  # Delay from the start of the pattern
+
+#> Represents a sound pattern made up of multiple steps and its total duration
+struct sound_pattern:
+	id: string                        # Unique pattern identifier
+	steps: structs                    # Collection of pattern_step structs
+	total_duration: timespan          # Total length of the pattern (computed)
+
+#> Represents a pattern layer, consisting of a pattern and specific beat timings to trigger it at
+struct pattern_layer:
+	pattern_id: string                # ID of the pattern to trigger
+	beats: numbers                    # List of beat offsets (relative to base beat duration)
+
+# FUNCTIONS
+
+#> Plays a sound struct to the given players
+#> This is mostly internal, you probably want to use the `sound` function instead
+#>
+#> @param p List of players to hear the sound
+#> @param sound A sound struct defining how the sound should play
+#> @param after (Optional) Delay before play
+function play_sound_struct(p: players, sound: struct, after: timespan = 0 ticks):
+	wait {_after}
+	play sound ({_sound}->id) with seed ({_sound}->seed) in ({_sound}->category) at volume ({_sound}->volume) at pitch ({_sound}->pitch) to {_p::*}
+
+#> Defines a new sound struct and registers it under an ID
+#>
+#> @param id A unique ID for the sound
+#> @param sound The Minecraft sound ID
+#> @param volume (Optional) Volume to play at, default 1
+#> @param pitch (Optional) Pitch to play at, default 1
+#> @param seed (Optional) Seed for variations of sounds, default random which is <none>
+#> @param category (Optional) Sound category, default master
+function define_sound(id: string, sound: string, volume: number = 1, pitch: number = 1, seed: integer = {_}, category: sound category = {_}):
+	locally suppress variable save warning
+	set {-sound::%{_id}%} to sound struct:
+		id: {_sound}
+		volume: {_volume}
+		pitch: {_pitch}
+		seed: {_seed}
+		category: {_category}
+
+#> Creates and returns a pattern_step struct
+#>
+#> @param id Sound ID for the step
+#> @param offset Time offset from the start of the pattern
+#> @return The created pattern_step struct
+function get_pattern_step(id: string, offset: timespan) :: struct: 
+	set {_step} to pattern_step struct:
+		sound_id: {_id}
+		offset: {_offset}
+	return {_step}
+
+#> Defines a new sound pattern from a collection of pattern steps
+#> Automatically calculates the total pattern duration
+#>
+#> @param id Unique identifier for the pattern
+#> @param steps A collection of pattern_step structs
+function define_pattern(id: string, steps: structs):
+	set {_total} to 0 ticks
+	for {_step} in {_steps::*}:
+		if {_total} < {_step}->offset:
+			set {_total} to {_step}->offset
+	set {-pattern::%{_id}%} to sound_pattern struct:
+		id: {_id}
+		steps: {_steps::*}
+		total_duration: {_total}
+
+#> Creates and returns a pattern_layer struct
+#>
+#> @param pattern_id ID of the pattern to use
+#> @param beats A list of beat positions (numbers) to schedule pattern play timings
+#> @return The created pattern_layer struct
+function get_pattern_layer(pattern_id: string, beats: numbers) :: struct:
+	set {_layer} to pattern_layer struct:
+		pattern_id: {_pattern_id}
+		beats: {_beats::*}
+	return {_layer}
+
+#> Plays one or more pattern layers for players, using a base beat duration
+#>
+#> @param p List of players to hear the pattern layers
+#> @param layers A collection of pattern_layer structs
+#> @param beat_duration Time duration for one beat
+function play_pattern_layer(p: players, layers: structs, beat_duration: timespan):
+	for {_layer} in {_layers::*}:
+		for {_beat} in {_layer}->beats:
+			set {_timing} to {_beat_duration} * {_beat}
+			play_pattern({_p::*}, {_layer}->pattern_id, {_timing})
+
+#> Plays a sound pattern after an optional delay
+#>
+#> @param p List of players to hear the pattern
+#> @param pattern_id ID of the pattern to trigger
+#> @param after (Optional) Delay before starting pattern
+function play_pattern(p: players, pattern_id: string, after: timespan = 0 ticks):
+	wait {_after}
+	for {_step} in {-pattern::%{_pattern_id}%}->steps:
+		sound({_p::*}, {_step}->sound_id, {_step}->offset)
+
+#> Plays a sound by ID after an optional delay
+#> Wrapper around `play_sound_struct` to automatically get the sound from id
+#>
+#> @param p List of players
+#> @param id Sound ID to play
+#> @param after Delay before play (default: 0 ticks)
+function sound(p: players, id: string, after: timespan = 0 ticks):
+	play_sound_struct({_p::*}, {-sound::%{_id}%}, {_after})
+
+#> Repeats a sound multiple times at a fixed interval
+#> Optionally transforms the sound struct each time before playing
+#>
+#> @param p List of players
+#> @param id Sound ID to play
+#> @param repeat Number of repetitions
+#> @param interval (Optional) Delay between each repeat 
+#> @param transformer (Optional) A function to modify the sound before each play
+function sound_repeat(p: players, id: string, repeat: integer, interval: timespan = {_}, transformer: function = {_}):
+	set {_sound} to {-sound::%{_id}%}
+	for {_i} in (integers between 1 and {_repeat}):
+		wait {_interval}
+		if {_transformer} is set:
+			set {_sound} to result of {_transformer} with args ({_sound}, {_i})
+		play_sound_struct({_p::*}, {_sound})

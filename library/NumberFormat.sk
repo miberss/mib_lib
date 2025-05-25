@@ -52,9 +52,16 @@ function number_format(number: number, format: string = "small") :: string:
 		return "%{_scaled}% %{_suffix}%"
 	return "%{_scaled}%%{_suffix}%"
 
+#> Returns whether a string is a valid format 
+#> 
+#> @param format The format to compare
+#> @return Returns true if it is a valid format.
 function is_format_valid(format: string) :: boolean:
 	return whether {_format} is any of all_formats()
 
+#> Returns all valid formats of the number_format function
+#> 
+#> @return All the formats
 function all_formats() :: strings:
 	return ("small", "big", "scientific" and "full")
 

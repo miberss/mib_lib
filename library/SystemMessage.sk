@@ -28,7 +28,7 @@ options:
 #>
 #> @param level The severity or type of the message, used to determine color styling via get_mib_color(level)
 #> @param msg The message template, which may include placeholders (%1%), [%1%], or {%1%}
-#> @param inputs (optional) A list of values to substitute into the message; defaults to a single placeholder "_"
+#> @param inputs (optional) A list of values to substitute into the message
 #>
 #> @return The fully formatted message string with substitutions and color formatting applied
 function system_message(level: string, msg: string, inputs: objects = {_}) :: string:

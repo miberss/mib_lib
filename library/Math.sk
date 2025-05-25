@@ -48,14 +48,25 @@ function sign(value: number) :: integer:
 function smooth_step(value: number) :: number:
 	return {_value} * {_value} * (3 - 2 * {_value})
 
-#> Loops a value back and forth between 0 and 1.
+#> Oscillates a value back and forth between 0 and n.
 #>
-#> Example: `pingpong(0.25)` → `0.25`, `pingpong(1.25)` → `0.75`
+#> Example: `ping_pong(0.25)` → `0.25`, `ping_pong(1.25)` → `0.75`
+#> Example: `ping_pong(0.25, 0.25)` → `1`, `ping_pong(1.25, 0.5)` → `0.25`
 #>
 #> @param value The input number.
-#> @return A number oscillating between 0 and 1.
-function pingpong(value: number) :: number:
-	return 1 - abs(1 - mod({_value} * 2, 2))
+#> @param n Where the value turns 
+#> @return A number oscillating between 0 and n.
+function ping_pong(value: number, n: number = 1) :: number:
+	return 0 if {_n} = 0 # Divide by 0 errors
+	return abs(fract(({_value} - {_n}) / ({_n} * 2)) * {_n} * 2 - {_n})
+
+#> Returns the decimal part of a positive number
+#> Returns 1 - decimal part of a negative number 
+#> 
+#> @param value The input number 
+#> @return A number between 0 and 1
+function fract(value: number) :: number:
+	return {_value} - floor({_value})
 
 #> Wraps a number around a range [low, high].
 #>

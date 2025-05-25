@@ -5,7 +5,7 @@ local function get_all_tests() :: functions:
 	return scripts in folder "mib_lib\tests" mapped with (function "test" from (script "%input%"))
 
 local function clear_test_results():
-	for {_id} in indexes of {-test::result::*}:
+	for {_id} in indexes of {-mib_lib::result::*}:
 		delete {-mib_lib::result::%{_id}%::*}
 
 local function test_header(name: string) :: string:
@@ -16,7 +16,7 @@ local function test_header(name: string) :: string:
 	return {_header}
 
 local function result_summary() :: string:
-	for {_id} in indexes of {-test::result::*}:
+	for {_id} in indexes of {-mib_lib::result::*}:
 		set {_total} to {_total} + 1
 		set {_value} to {-mib_lib::result::%{_id}%::value}
 		if {_value} = true:

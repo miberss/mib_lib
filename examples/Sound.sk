@@ -6,10 +6,6 @@ on script load:
 	define_sound("impact", "minecraft:entity.ender_eye.death", 0.7, 1.75, 3)
 	define_sound("boom", "entity.illusioner.prepare_mirror", 1, 1.2, 1)
 	define_sound("hit", "block.gilded_blackstone.hit", 0.8, 2, 1)
-	define_sound("magic", "block.amethyst_block.hit", 1, 9)
-	define_sound("kick", "block.ancient_debris.hit", 0.2, 1, 1)
-	define_sound("tsk", "block.big_dripleaf.tilt_up", 0.3, 1)
-	define_sound("chime", "block.note_block.chime", 0.5, 1)
 
 # transformer that slightly raises pitch and volume each repeat
 local function pitch_up(sound: struct, i: integer) :: struct:
@@ -18,7 +14,7 @@ local function pitch_up(sound: struct, i: integer) :: struct:
 	return {_sound}
 
 # play a repeating sound sequence to a player
-function play_teh_sound(p: player):
+function play_the_sound(p: player):
 	sound_repeat({_p}, "bass", 4, 10 ticks, function "pitch_up")
 	sound_repeat({_p}, "impact", 4, 10 ticks, function "pitch_up")
 	sound_repeat({_p}, "hit", 8, 5 ticks)

@@ -9,8 +9,8 @@
 #> @param duration The duration of the cooldown
 #> @param holder (optional) The holder of the cooldown
 function set_cooldown(id: text, duration: timespan, holder: metadataholder = {_}):
-    set {mib_lib::cooldown::%{_id}%::%{_holder}%::duration} to {_duration}
-    set {mib_lib::cooldown::%{_id}%::%{_holder}%::start} to now
+    set {-mib_lib::cooldown::%{_id}%::%{_holder}%::duration} to {_duration}
+    set {-mib_lib::cooldown::%{_id}%::%{_holder}%::start} to now
 
 #> Deletes a cooldown with an id and holder
 #> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
@@ -18,7 +18,7 @@ function set_cooldown(id: text, duration: timespan, holder: metadataholder = {_}
 #> @param id The id of the cooldown
 #> @param holder (optional) The holder of the cooldown
 function delete_cooldown(id: text, holder: metadataholder = {_}):
-    delete {mib_lib::cooldown::%{_id}%::%{_holder}%::*}
+    delete {-mib_lib::cooldown::%{_id}%::%{_holder}%::*}
 
 #> Returns the remaining time of the cooldown with an id and holder
 #> If the cooldown is over, it will automatically delete it and return 0 seconds.
@@ -27,7 +27,7 @@ function delete_cooldown(id: text, holder: metadataholder = {_}):
 #> @param holder (optional) The holder of the cooldown
 #> @return The remaining time of the cooldown
 function get_remaining_cooldown(id: text, holder: metadataholder = {_}) :: timespan:
-    set {_remaining} to {mib_lib::cooldown::%{_id}%::%{_holder}%::duration} - (time since {cooldown::%{_id}%::%{_holder}%::start})
+    set {_remaining} to {-mib_lib::cooldown::%{_id}%::%{_holder}%::duration} - (time since {-mib_lib::cooldown::%{_id}%::%{_holder}%::start})
     return {_remaining} if {_remaining} > 0 seconds
     delete_cooldown({_id}, {_holder})
     return 0 seconds

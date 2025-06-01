@@ -44,7 +44,8 @@ function test_value(test_id: string, type: string, value: object, expected: obje
 
 	return {_result}
 
-#> Formats the result of a type equality test with status indicators, messages, and expected/actual types and values.
+#> Formats the result of a type equality test with status
+#> indicators, messages, and expected/actual types and values.
 #>
 #> @param test_id Unique identifier for the test run.
 #> @param type The result type (either "success" or "error").

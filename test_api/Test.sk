@@ -10,12 +10,12 @@ function run_test(test_id: string, value: object, expected: object) :: booleans:
 	set {_result::value} to assert( {_value}, {_expected} )
 	set {_result::type} to type_assert( {_value}, {_expected} )
 
-	set {_type} to "error" if ({_result::value} = false) else "success" 
+	set {_type} to "error" if ({_result::value} = false) else "success"
 	set {-mib_lib::result::%{_test_id}%::value} to {_result::value}
 
 	set {_message::value} to test_value( {_test_id}, {_type}, {_value}, {_expected} )
 
-	set {_type} to "error" if ({_result::type} = false) else "success" 
+	set {_type} to "error" if ({_result::type} = false) else "success"
 	set {-mib_lib::result::%{_test_id}%::type} to {_result::type}
 
 	set {_message::type} to test_type( {_test_id}, {_type}, {_value}, {_expected} )
@@ -67,15 +67,15 @@ function test_type(test_id: string, type: string, value: object, expected: objec
 	return {_result}
 
 #> Assert on the type of both values provided
-#> 
+#>
 #> @param value The value to compare
 #> @param expected The value to compare against
 #> @return Whether the type of two parameters are equal
 function type_assert(value: object, expected: object) :: boolean:
-	return whether type({_value}) = type({_expected}) 
+	return whether type({_value}) = type({_expected})
 
 #> Asserts both values provided
-#> 
+#>
 #> @param value The value to compare
 #> @param expected The value to compare against
 #> @return Whether the two parameters are equal

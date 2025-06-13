@@ -19,5 +19,5 @@ local function test():
 
 	run_test("scientific_format_1234", number_format(1234, "scientific"), "1.23E3")
 	run_test("scientific_format_1234567", number_format(1234567, "scientific"), "1.23E6")
-	
+
 	run_test("default_format_1234", number_format(1234), "1.23k")

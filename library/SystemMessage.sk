@@ -1,7 +1,7 @@
 # This module provides a system for formatting strings into
 # neat, good-looking messages. You can optionally pass in
 # inputs to replace in the message.
-# 
+#
 # This module requires the following other modules: NONE
 
 using for loops
@@ -15,7 +15,7 @@ on script load:
 	set {-mib_lib::color::success} to "<#4FB477>"
 
 options:
-	main: %{-mib_lib::color::main}% 
+	main: %{-mib_lib::color::main}%
 	accent: %{-mib_lib::color::accent}%
 	prefix: [⏹]
 
@@ -33,7 +33,7 @@ options:
 #> @return The fully formatted message string with substitutions and color formatting applied
 function system_message(level: string, msg: string, inputs: objects = {_}) :: string:
 	set {_prefix} to formatted "%get_mib_color({_level})%{@prefix}{@main}"
-	
+
 	if {_inputs::1} is not set:
 		return formatted "%{_prefix}% %{_msg}%"
 
@@ -45,7 +45,7 @@ function system_message(level: string, msg: string, inputs: objects = {_}) :: st
 	replace all "\(" with "(" in {_msg}
 	replace all "\[" with "[" in {_msg}
 	replace all "\{" with "{" in {_msg}
-	
+
 	return formatted "%{_prefix}% %{_msg}%"
 
 #> Shorthand for system_message function
@@ -70,27 +70,35 @@ function space(pixels: integer, after_format: string = {_}) :: string:
 		zero({_zero})
 		"<reset>"
 		{_after_format} ? {@main}
-		
+
 	return {_space_string}
 
 #> Get zero width characters, useful for aligning
 #> in console -> to get an space that is visible to console, but not chat
 #> in chat -> combine with bold formatting to get a singular pixel space
-#> 
+#>
 #> @param times Amount of zero width characters
 #> @return The zero width characters
 function zero(times: integer) :: string:
 	return ((character at codepoint 8204) repeated {_times} times) ? ""
 
 #> Returns the color of mib_lib's formatting, for use internally.
-#> 
+#>
 #> @param level
 #> @return The level's color
 function get_mib_color(level: string) :: string:
 	return {-mib_lib::color::%{_level}%}
 
-#> Sends a formatted message to console and all operators 
-#> 
+#> Sends a formatted message to console and all operators
+#>
 #> @param message The message
 function admin_log(message: string):
 	send formatted ({_message}) to (console and all operators)
+
+function sm_log(msg: string, inputs: objects = {_}) :: string:
+	set {_sm} to sm("info", {_msg}, {_inputs::*})
+	admin_log({_sm})
+	return {_sm}
+
+function f(str: string) :: string:
+

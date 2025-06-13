@@ -1,6 +1,6 @@
 local function test():
 	run_test("lerp_mid", lerp(1, 2), 1.5)
-	run_test("lerp_mid_large", lerp(-200000, 200000), 0)
+	run_test("lerp_mid_large", lerp(-200000, 200000), 0.0)
 	run_test("lerp", lerp(0, 1, 0.9), 0.9)
 	run_test("lerp_small", lerp(0.01, 0.02, 0.72), 0.0172)
 	run_test("sign_positive", sign(13), 1)

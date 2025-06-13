@@ -67,7 +67,7 @@ function define_sound(id: string, sound: string, volume: number = 1, pitch: numb
 #> @param id Sound ID for the step
 #> @param offset Time offset from the start of the pattern
 #> @return The created pattern_step struct
-function get_pattern_step(id: string, offset: timespan) :: struct: 
+function get_pattern_step(id: string, offset: timespan) :: struct:
 	set {_step} to pattern_step struct:
 		sound_id: {_id}
 		offset: {_offset}
@@ -143,7 +143,7 @@ function get_sound(id: string) :: struct:
 #> @param p List of players
 #> @param id Sound ID to play
 #> @param repeat Number of repetitions
-#> @param interval (Optional) Delay between each repeat 
+#> @param interval (Optional) Delay between each repeat
 #> @param transformer (Optional) A function to modify the sound before each play
 function sound_repeat(p: players, id: string, repeat: integer, interval: timespan = {_}, transformer: function = {_}):
 	set {_sound} to get_sound({_id})

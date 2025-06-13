@@ -1,0 +1,7 @@
+using for loops
+
+on right click:
+	set {_p} to player("miberss")
+	set {_pos} to clicked block
+	set {_blocks::*} to all_in_circle(10) mapped with [{_pos} ~ input]
+	make {_p} see {_blocks::*} as black wool

@@ -8,7 +8,7 @@ on script load:
 
 #> Returns a random integer between **from** and **to**.
 #> A simple wrapper function around "random integer from x to y" since it provides to clutter.
-#> 
+#>
 #> @param to The maximum integer value.
 #> @param from The minimum integer value. Defaults to **0**.
 #> @return A random integer from **from** to **to**.
@@ -25,11 +25,12 @@ function rnd(to: number, from: number = 0) :: number:
 	return random number from {_from} to {_to}
 
 #> Linearly interpolates between **a** and **b** at **time**
-#> the `time` parameter defaults to 0.5 since that provides a way to get the halfway point between two numbers
+#> the `time` parameter defaults to 0.5 since that provides
+#> a way to get the halfway point between two numbers
 #>
 #> @param a The start number.
 #> @param b The end number.
-#> @param time A value indicating the interpolation factor. 
+#> @param time A value indicating the interpolation factor.
 #> @return The interpolated number between **a** and **b**.
 function lerp(a: number, b: number, time: number = 0.5) :: number:
 	return {_a} * (1 - {_time}) + {_b} * {_time}
@@ -39,12 +40,11 @@ function lerp(a: number, b: number, time: number = 0.5) :: number:
 #> @param value The number to check.
 #> @return -1 if negative, 1 if positive, 0 if zero.
 function sign(value: number) :: integer:
-	return -1 if {_value} < 0 
+	return -1 if {_value} < 0
 	return 1 if {_value} > 0
 	return 0
 
 #> Smoothly interpolates a value between 0 and 1 using the SmoothStep function.
-#> 
 #> Useful for easing animations or transitions.
 #>
 #> @param value A number between 0 and 1.
@@ -58,16 +58,16 @@ function smooth_step(value: number) :: number:
 #> Example: `ping_pong(0.25, 0.25)` → `1`, `ping_pong(1.25, 0.5)` → `0.25`
 #>
 #> @param value The input number.
-#> @param n Where the value turns 
+#> @param n Where the value turns
 #> @return A number oscillating between 0 and n.
 function ping_pong(value: number, n: number = 1) :: number:
 	return 0 if {_n} = 0 # Divide by 0 errors
 	return abs(fract(({_value} - {_n}) / ({_n} * 2)) * {_n} * 2 - {_n})
 
 #> Returns the decimal part of a positive number
-#> Returns 1 - decimal part of a negative number 
-#> 
-#> @param value The input number 
+#> Returns 1 - decimal part of a negative number
+#>
+#> @param value The input number
 #> @return A number between 0 and 1
 function fract(value: number) :: number:
 	return {_value} - floor({_value})
@@ -94,3 +94,13 @@ function hex(value: integer) :: string:
 	return "0" if {_value} <= 0
 	return {-mib_lib::math::hex}[{_value}] if {_value} < 16
 	return hex({_value} >> 4) + {-mib_lib::math::hex}[{_value} & 0xF]
+
+#> Returns the closest angle to one of the discrete angles: 0, 90, 180, or 270 degrees.
+#>
+#> Given any numeric input angle in degrees, this function finds which of the
+#> four standard angles (0°, 90°, 180°, or 270°) is nearest to the input.
+#>
+#> @param value The input angle in degrees, can be negative / positive
+#> @return The closest angle among [0, 90. 180, 270]
+function closest_angle_value(value: number) :: integer:
+	return clamp(round({_x} / 90), 0, 3) * 90

@@ -8,23 +8,23 @@ import:
 	java.text.DecimalFormat
 
 #> Formats a large number into a human-readable string with suffixes.
-#> 
+#>
 #> @param number The numeric value to format.
 #> @param format The formatting option, (small|big|full|scientific).
 #> @return A formatted string representing the number with an appropriate suffix.
-#> 
-#>**small**:      
+#>
+#>**small**:
 #>- 1234 → "1.23k"
 #>- 1234567 → "1.23M"
-#> 
+#>
 #>**big**:
 #>- 1234 → "1.23 Thousand"
 #>- 1234567 → "1.23 Million"
-#> 
-#>**full**:       
-#>- 1234 → 1,234 
+#>
+#>**full**:
+#>- 1234 → 1,234
 #>- 1234567 → 1,234,567
-#> 
+#>
 #>**scientific**:
 #>- 1234 → "1.23E3"
 #>- 1234567 → "1.23E6"
@@ -52,15 +52,15 @@ function number_format(number: number, format: string = "small") :: string:
 		return "%{_scaled}% %{_suffix}%"
 	return "%{_scaled}%%{_suffix}%"
 
-#> Returns whether a string is a valid format 
-#> 
+#> Returns whether a string is a valid format
+#>
 #> @param format The format to compare
 #> @return Returns true if it is a valid format.
 function is_format_valid(format: string) :: boolean:
 	return whether {_format} is any of all_formats()
 
 #> Returns all valid formats of the number_format function
-#> 
+#>
 #> @return All the formats
 function all_formats() :: strings:
 	return ("small", "big", "scientific" and "full")

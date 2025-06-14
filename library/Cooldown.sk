@@ -3,7 +3,8 @@
 # This module requires the following other modules: NONE
 
 #> Sets a cooldown with an id and holder
-#> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
+#> **holder** can be any metadata holder, such as an entity, block, or world.
+#> It is used to specify who the cooldown belongs to.
 #>
 #> @param id The id of the cooldown
 #> @param duration The duration of the cooldown
@@ -13,7 +14,8 @@ function set_cooldown(id: string, duration: timespan, holder: metadataholder = {
     set {-mib_lib::cooldown::%{_id}%::%{_holder}%::start} to now
 
 #> Deletes a cooldown with an id and holder
-#> **holder** can be any metadata holder, such as an entity, block, or world. It is used to specify who the cooldown belongs to.
+#> **holder** can be any metadata holder, such as an entity, block, or world.
+#> It is used to specify who the cooldown belongs to.
 #>
 #> @param id The id of the cooldown
 #> @param holder (Optional) The holder of the cooldown

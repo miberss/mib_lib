@@ -91,14 +91,16 @@ function get_mib_color(level: string) :: string:
 
 #> Sends a formatted message to console and all operators
 #>
-#> @param message The message
+#> @param message The message to send
 function admin_log(message: string):
 	send formatted ({_message}) to (console and all operators)
 
+#> Sends a "info" SystemMessage to console and all operators
+#> Shorthand for `admin_log(sm("info", msg, inputs))`, which I find
+#> to be doing constantly for debugging purposes
+#>
+#> @return The "info" SystemMessage generated
 function sm_log(msg: string, inputs: objects = {_}) :: string:
 	set {_sm} to sm("info", {_msg}, {_inputs::*})
 	admin_log({_sm})
 	return {_sm}
-
-function f(str: string) :: string:
-

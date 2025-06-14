@@ -41,7 +41,7 @@ local function magic_changer(sound: struct, i: integer) :: struct:
 # patterns and layers are different ways to define sounds,
 # they give you a less messy way of describing "beats" and i bet
 # you could compose a basic song / kick drum loop with this
-# 
+#
 # i am not a music producer so i don't really know how to use this
 # well but im sure other people could find this useful.
 #
